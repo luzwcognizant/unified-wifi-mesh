@@ -30,16 +30,18 @@ INCLUDEDIRS = \
 	-I$(ONEWIFI_HAL_INTF_HOME)/ \
 	-I$(ONEWIFI_HOME)/source/utils \
 	-I$(ONEWIFI_HOME)/include \
-    	-I$(RBUS_HOME)/include \
-    	-I$(ONEWIFI_EM_HOME)/src/util_crypto \
+	-I$(RBUS_HOME)/include \
+	-I$(ONEWIFI_EM_HOME)/src/util_crypto \
+	-I$(AL_SAP_HOME)/include \
 	-I$(WIFI_CJSON) \
 
-CXXFLAGS = $(INCLUDEDIRS) -g -DUNIT_TEST
+CXXFLAGS = $(INCLUDEDIRS) -g -DUNIT_TEST -DAL_SAP
 LDFLAGS = $(LIBDIRS) $(LIBS)
 LIBDIRS = \
 	-L$(INSTALLDIR)/lib \
+	-L/usr/lib/ieee1905 \
 
-LIBS = -lm -lpthread -ldl -luuid -lcjson -lssl -lcrypto -lmysqlcppconn
+LIBS = -lm -lpthread -ldl -luuid -lcjson -lssl -lcrypto -lmysqlcppconn -lalsap
 
 GENERIC_SOURCES = $(ONEWIFI_HOME)/source/utils/collection.c \
 	$(ONEWIFI_EM_SRC)/util_crypto/aes_siv.c \

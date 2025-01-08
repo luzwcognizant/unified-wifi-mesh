@@ -41,6 +41,7 @@
 
 em_agent_t g_agent;
 const char *global_netid = "OneWifiMesh";
+AlServiceAccessPoint* g_sap;
 
 void em_agent_t::handle_sta_list(em_bus_event_t *evt)
 {
@@ -452,7 +453,12 @@ void em_agent_t::input_listener()
         return;
     }
 
+#ifdef AL_SAP
+    g_sap = al_sap_register(NULL, false);
+    al_sap_io(g_sap);
+#else
     io(NULL);
+#endif // AL_SAP
 }
 
 int em_agent_t::mgmt_action_frame_cb(char *event_name, raw_data_t *data)

@@ -41,12 +41,13 @@
 #include "em_msg.h"
 #include "em_ctrl.h"
 #include "em_cmd_ctrl.h"
+#include "em_sap_ctrl.h"
 #include "dm_easy_mesh.h"
 #include "em_orch_ctrl.h"
 
 em_ctrl_t g_ctrl;
 const char *global_netid = "OneWifiMesh";
-
+AlServiceAccessPoint* g_sap;
 
 void em_ctrl_t::handle_dm_commit(em_bus_event_t *evt)
 {
@@ -378,8 +379,13 @@ void em_ctrl_t::input_listener()
 {
     em_long_string_t str;
 
+#ifdef AL_SAP
+    g_sap = al_sap_register(str, false);
+    al_sap_io(g_sap);
+#else
     // the listener must block on inputs (rbus or pipe or other ipc messages)
     io(str, false);
+#endif // AL_SAP
 }
 
 void em_ctrl_t::handle_bus_event(em_bus_event_t *evt)

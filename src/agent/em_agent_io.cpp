@@ -38,6 +38,10 @@
 #include "em_agent.h"
 #include "em_cmd_agent.h"
 #include "util.h"
+#include "em_sap_agent.h"
+#include "al_service_access_point.hpp"
+
+#define SOCKET_PATH "/tmp/tunnel_1_in"
 
 
 bool em_agent_t::agent_input(void *data)
@@ -88,3 +92,31 @@ void em_agent_t::io(void *data, bool input)
     }
 }
 
+AlServiceAccessPoint* em_agent_t::al_sap_register(void *data, bool input)
+{
+    std::string customSocketPath = SOCKET_PATH;
+    AlServiceAccessPoint* sap = new AlServiceAccessPoint(customSocketPath);
+
+    AlServiceRegistrationRequest registrationRequest(ServiceOperation::SO_ENABLE, ServiceType::SAP_TUNNEL_CLIENT);
+    sap->serviceAccessPointRegistrationRequest(registrationRequest);
+    std::cout << "Agent sent the registration request successfully!";
+
+    AlServiceRegistrationResponse registrationResponse = sap->serviceAccessPointRegistrationResponse();
+    std::cout << "Agent received the registration response successfully!";
+
+    std::cout << "Registration completed with MAC Address: ";
+    for (auto byte : registrationResponse.getAlMacAddressLocal()) {
+        std::cout << std::hex << static_cast<int>(byte) << " ";
+    }
+    std::cout << std::dec << std::endl;
+
+    //verify the result
+    //messag id range for controller in this case
+
+    return sap;
+}
+
+void em_agent_t::al_sap_io(AlServiceAccessPoint* sap)
+{
+    m_sap_agent->execute(sap);
+}

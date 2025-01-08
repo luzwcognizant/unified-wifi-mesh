@@ -39,7 +39,9 @@
 #include <pthread.h>
 #include <cjson/cJSON.h>
 #include "em_cli.h"
+#include "al_service_access_point.hpp"
 
+extern AlServiceAccessPoint* g_sap;
 
 void em_cmd_exec_t::wait(struct timespec *time_to_wait)
 {
@@ -119,6 +121,36 @@ char *em_cmd_exec_t::get_path_from_dst_service(em_service_type_t to_svc, em_long
 
 int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigned int in_len, char *out, unsigned int out_len)
 {
+#ifdef AL_SAP
+    AlServiceDataUnit sdu;
+    sdu.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
+    sdu.setDestinationAlMacAddress({0x66, 0x66, 0x66, 0x66, 0x66, 0x66});
+
+    std::vector<unsigned char> in_payload;
+    for (int i = 0; i < strlen((char*)in); i++) {
+        in_payload.push_back(in[i]);
+    }
+    sdu.setPayload(in_payload);
+
+    g_sap->serviceAccessPointDataRequest(sdu);
+    std::cout << "Sent cmd successfull!" << std::endl;
+    std::cout << "Sent cmd:" << std::endl;
+    for (auto byte : in_payload) {
+        std::cout << std::hex << static_cast<int>(byte) << " ";
+    }
+    std::cout << std::dec << std::endl;
+
+    AlServiceDataUnit receivedData = g_sap->serviceAccessPointDataIndication();
+    std::vector<unsigned char> out_payload = receivedData.getPayload();
+    std::cout << "Received cmd successfull!" << std::endl;
+    std::cout << "Received cmd:" << std::endl;
+    for (auto byte : out_payload) {
+        std::cout << std::hex << static_cast<int>(byte) << " ";
+    }
+    std::cout << std::dec << std::endl;
+
+    memcpy(out, out_payload.data(), out_payload.size() * sizeof(unsigned char));
+#else
     struct sockaddr_un addr;
     int dsock, ret;
     em_long_string_t sock_path;
@@ -157,6 +189,7 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
         return -1;
     }
     close(dsock);
+#endif //AL_SAP
     return 0;
 }
 

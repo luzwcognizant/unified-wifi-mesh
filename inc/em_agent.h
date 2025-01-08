@@ -28,6 +28,8 @@
 #include "bus.h"
 
 class em_cmd_agent_t;
+class em_sap_agent_t;
+class AlServiceAccessPoint;
 
 class em_agent_t : public em_mgr_t {
 
@@ -35,6 +37,7 @@ class em_agent_t : public em_mgr_t {
     dm_easy_mesh_agent_t m_data_model;
     em_short_string_t   m_data_model_path;
     em_cmd_agent_t  *m_agent_cmd;
+    em_sap_agent_t   *m_sap_agent;
 
     void io_run(char *buff);
 
@@ -97,6 +100,9 @@ public:
     void io(void *data, bool input = true);
     bool agent_input(void *data);
     bool agent_output(void *data);
+
+    AlServiceAccessPoint* al_sap_register(void *data, bool input = true);
+    void al_sap_io(AlServiceAccessPoint* sap);
     
     em_agent_t();
     ~em_agent_t();

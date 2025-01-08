@@ -25,11 +25,14 @@
 #include "em_orch_ctrl.h"
 
 class em_cmd_ctrl_t;
+class em_sap_ctrl_t;
+class AlServiceAccessPoint;
 
 class em_ctrl_t : public em_mgr_t {
 
     dm_easy_mesh_ctrl_t m_data_model;
     em_cmd_ctrl_t   *m_ctrl_cmd;
+    em_sap_ctrl_t   *m_ctrl_sap;
     em_orch_ctrl_t *m_orch;
     unsigned int m_tick_demultiplex;
 
@@ -74,6 +77,9 @@ public:
 
     void io(void *data, bool input = true);
     bool io_process(em_event_t *evt);
+
+    AlServiceAccessPoint* al_sap_register(void *data, bool input = true);
+    void al_sap_io(AlServiceAccessPoint* sap);
 
     dm_easy_mesh_t *get_data_model(const char *net_id, const unsigned char *al_mac = NULL) { return m_data_model.get_data_model(net_id, al_mac); }
     dm_easy_mesh_t *create_data_model(const char *net_id, const unsigned char *al_mac, em_profile_type_t profile = em_profile_type_3) { return m_data_model.create_data_model(net_id, al_mac, profile); }
