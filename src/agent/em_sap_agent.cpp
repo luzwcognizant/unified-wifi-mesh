@@ -66,7 +66,7 @@ int em_sap_agent_t::execute(AlServiceAccessPoint* sap)
         }
         std::cout << std::dec << std::endl;
 
-        em_event_t *tmp = get_event();
+        /*em_event_t *tmp = get_event();
         memcpy(tmp, payload.data(), payload.size() * sizeof(unsigned char));
 
         switch (get_event()->type) {
@@ -77,7 +77,7 @@ int em_sap_agent_t::execute(AlServiceAccessPoint* sap)
             default:
                 wait = false;
                 break;
-        }
+        }*/
 
         if (wait == false) {
             send_result(sap, em_cmd_out_status_other);

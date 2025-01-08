@@ -39,7 +39,7 @@
 #include "em_sap_ctrl.h"
 #include "al_service_access_point.hpp"
 
-#define SOCKET_PATH "/tmp/tunnel_1_in"
+#define SOCKET_PATH "/tmp/tunnel_2_in"
 
 bool em_ctrl_t::io_process(em_event_t *evt)
 {
