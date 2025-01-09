@@ -399,7 +399,7 @@ void em_agent_t::handle_timeout()
 
 void em_agent_t::input_listener()
 {
-    /*wifi_bus_desc_t *desc;
+    wifi_bus_desc_t *desc;
     dm_easy_mesh_t dm;
     em_event_t evt;
     em_bus_event_t *bevt;
@@ -451,7 +451,7 @@ void em_agent_t::input_listener()
     if (desc->bus_event_subs_fn(&m_bus_hdl, "Device.WiFi.AccessPoint.1.RawFrame.Mgmt.Action.Rx", (void *)&em_agent_t::mgmt_action_frame_cb, NULL, 0) != 0) {
         printf("%s:%d bus get failed\n", __func__, __LINE__);
         return;
-    }*/
+    }
 
 #ifdef AL_SAP
     g_sap = al_sap_register(NULL, false);

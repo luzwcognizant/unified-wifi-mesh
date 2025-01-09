@@ -49,7 +49,9 @@
 #include "em.h"
 #include "em_cmd.h"
 #include "em_cmd_exec.h"
+#include "al_service_access_point.hpp"
 
+extern AlServiceAccessPoint* g_sap;
 
 void em_t::orch_execute(em_cmd_t *pcmd)
 {
@@ -463,6 +465,9 @@ int em_t::set_bp_filter()
 
 int em_t::start_al_interface()
 {
+#ifdef AL_SAP
+    m_fd = g_sap->getSocketDescriptor();
+#else
     int optval = 1, sock_fd;
     struct sockaddr_ll addr_ll;
     struct sockaddr_un addr_un;
@@ -490,7 +495,7 @@ int em_t::start_al_interface()
     m_fd = sock_fd;
 
     set_bp_filter();
-
+#endif // AL_SAP
     return 0;
 }
 
