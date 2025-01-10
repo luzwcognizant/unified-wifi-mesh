@@ -57,10 +57,10 @@ int em_sap_agent_t::execute(AlServiceAccessPoint* sap)
     bool wait = false;
 
     while (1) {
-        AlServiceDataUnit receivedData1000 = sap->serviceAccessPointDataIndication();
+        AlServiceDataUnit sdu = sap->serviceAccessPointDataIndication();
         std::cout << "Agent received the message successfully!" << std::endl;
         std::cout << "Received payload:" << std::endl;
-        std::vector<unsigned char> payload = receivedData1000.getPayload();
+        std::vector<unsigned char> payload = sdu.getPayload();
         for (auto byte : payload) {
             std::cout << std::hex << static_cast<int>(byte) << " ";
         }
@@ -96,7 +96,7 @@ int em_sap_agent_t::send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t s
 
     AlServiceDataUnit sdu;
     sdu.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
-    sdu.setDestinationAlMacAddress({0x66, 0x66, 0x66, 0x66, 0x66, 0x66});
+    sdu.setDestinationAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
 
     std::vector<unsigned char> payload;
     for (int i = 0; i < strlen(tmp); i++) {
