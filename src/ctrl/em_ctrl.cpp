@@ -71,13 +71,13 @@ void em_ctrl_t::handle_client_steer(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_command_steer(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -98,13 +98,13 @@ void em_ctrl_t::handle_client_disassoc(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_command_disassoc(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -125,13 +125,13 @@ void em_ctrl_t::handle_client_btm(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_command_btm(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -152,13 +152,13 @@ void em_ctrl_t::handle_start_dpp(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_dpp_start(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -179,13 +179,13 @@ void em_ctrl_t::handle_set_channel_list(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_set_channel(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -206,13 +206,13 @@ void em_ctrl_t::handle_scan_channel_list(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_scan_channel(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -233,13 +233,13 @@ void em_ctrl_t::handle_set_policy(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_set_policy(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -290,13 +290,13 @@ void em_ctrl_t::handle_set_radio(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_set_radio(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -318,17 +318,17 @@ void em_ctrl_t::handle_set_ssid_list(em_bus_event_t *evt)
     int ret;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((ret = m_data_model.analyze_set_ssid(evt, pcmd)) <= 0) {
         if (ret == EM_PARSE_ERR_NO_CHANGE) {
-        	em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        	m_ctrl_sap->send_result(em_cmd_out_status_no_change);
 		} else {
-        	em_sap_ctrl_t->send_result(em_cmd_out_status_invalid_input);
+        	m_ctrl_sap->send_result(em_cmd_out_status_invalid_input);
 		}
     } else if (m_orch->submit_commands(pcmd, num = ret) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -353,13 +353,13 @@ void em_ctrl_t::handle_remove_device(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_remove_device(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -381,7 +381,7 @@ void em_ctrl_t::handle_get_dm_data(em_bus_event_t *evt)
     //em_cmd_t::dump_bus_event(evt);
     if (params->u.args.num_args < 1) {
 #ifdef AL_SAP
-        em_sap_ctrl_t->send_result(em_cmd_out_status_invalid_input);
+        m_ctrl_sap->send_result(em_cmd_out_status_invalid_input);
 #else
         m_ctrl_cmd->send_result(em_cmd_out_status_invalid_input);
 #endif
@@ -389,10 +389,11 @@ void em_ctrl_t::handle_get_dm_data(em_bus_event_t *evt)
     }
 
     m_data_model.get_config(params->u.args.args[1], &evt->u.subdoc);
-    m_ctrl_cmd->copy_bus_event(evt);
 #ifdef AL_SAP
-    em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+    m_ctrl_sap->copy_bus_event(evt);
+    m_ctrl_sap->send_result(em_cmd_out_status_success);
 #else
+    m_ctrl_cmd->copy_bus_event(evt);
     m_ctrl_cmd->send_result(em_cmd_out_status_success);
 #endif
 }        
@@ -403,13 +404,13 @@ void em_ctrl_t::handle_dev_test(em_bus_event_t *evt)
     unsigned int num = 0;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_dev_test(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -430,13 +431,13 @@ void em_ctrl_t::handle_reset(em_bus_event_t *evt)
     unsigned int num = 0;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_ctrl_sap->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_reset(evt, pcmd)) == 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_no_change);
+        m_ctrl_sap->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_success);
+        m_ctrl_sap->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_ctrl_t->send_result(em_cmd_out_status_not_ready);
+        m_ctrl_sap->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -628,10 +629,13 @@ int em_ctrl_t::data_model_init(const char *data_model_path)
     em_interface_t *intf;
     dm_easy_mesh_t *dm;
     mac_addr_str_t  mac_str;
-
+#ifdef AL_SAP
+    m_ctrl_sap = new em_sap_ctrl_t();
+    m_ctrl_sap->init();
+#else
     m_ctrl_cmd = new em_cmd_ctrl_t();
     m_ctrl_cmd->init();
-    
+#endif
     if (m_data_model.init(data_model_path, this) != 0) {
         printf("%s:%d: data model init failed\n", __func__, __LINE__);
         return 0;

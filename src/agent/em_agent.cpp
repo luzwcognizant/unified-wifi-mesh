@@ -75,13 +75,13 @@ void em_agent_t::handle_ap_cap_query(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_ap_cap_query(evt, pcmd)) == 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_no_change);
+        m_sap_agent->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_success);
+        m_sap_agent->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_agent_t->send_result(em_cmd_out_status_not_ready);
+        m_sap_agent->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -102,13 +102,13 @@ void em_agent_t::handle_radio_config(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_radio_config(evt, pcmd)) == 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_no_change);
+        m_sap_agent->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_success);
+        m_sap_agent->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_agent_t->send_result(em_cmd_out_status_not_ready);
+        m_sap_agent->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -129,13 +129,13 @@ void em_agent_t::handle_vap_config(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_vap_config(evt, pcmd)) == 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_no_change);
+        m_sap_agent->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_success);
+        m_sap_agent->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_agent_t->send_result(em_cmd_out_status_not_ready);
+        m_sap_agent->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -156,13 +156,13 @@ void em_agent_t::handle_dev_init(em_bus_event_t *evt)
     unsigned int num;
 #ifdef AL_SAP
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
     } else if ((num = m_data_model.analyze_dev_init(evt, pcmd)) == 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_no_change);
+        m_sap_agent->send_result(em_cmd_out_status_no_change);
     } else if (m_orch->submit_commands(pcmd, num) > 0) {
-        em_sap_agent_t->send_result(em_cmd_out_status_success);
+        m_sap_agent->send_result(em_cmd_out_status_success);
     } else {
-        em_sap_agent_t->send_result(em_cmd_out_status_not_ready);
+        m_sap_agent->send_result(em_cmd_out_status_not_ready);
     }
 #else
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
@@ -184,7 +184,7 @@ void em_agent_t::handle_channel_pref_query(em_bus_event_t *evt)
 
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
 #ifdef AL_SAP
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #else
         m_agent_cmd->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #endif
@@ -207,7 +207,7 @@ void em_agent_t::handle_channel_sel_req(em_bus_event_t *evt)
 
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
 #ifdef AL_SAP
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #else
         m_agent_cmd->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #endif
@@ -228,7 +228,7 @@ void em_agent_t::handle_m2ctrl_configuration(em_bus_event_t *evt)
 
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
 #ifdef AL_SAP
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #else
         m_agent_cmd->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #endif
@@ -249,7 +249,7 @@ void em_agent_t::handle_onewifi_private_cb(em_bus_event_t *evt)
 
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
 #ifdef AL_SAP
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #else
         m_agent_cmd->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #endif
@@ -272,7 +272,7 @@ void em_agent_t::handle_onewifi_radio_cb(em_bus_event_t *evt)
 
     if (m_orch->is_cmd_type_in_progress(evt->type) == true) {
 #ifdef AL_SAP
-        em_sap_agent_t->send_result(em_cmd_out_status_prev_cmd_in_progress);
+        m_sap_agent->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #else
         m_agent_cmd->send_result(em_cmd_out_status_prev_cmd_in_progress);
 #endif
@@ -639,9 +639,11 @@ int em_agent_t::data_model_init(const char *data_model_path)
         printf("%s:%d: data model init failed\n", __func__, __LINE__);
         return -1;
     }
-
+#ifdef AL_SAP
+    m_sap_agent = new em_cmd_agent_t();
+#else
     m_agent_cmd = new em_cmd_agent_t();
-
+#endif
     return 0;
 }
 
