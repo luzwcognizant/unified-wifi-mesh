@@ -100,7 +100,8 @@ AlServiceAccessPoint* em_ctrl_t::al_sap_register(void *data, bool input)
     return sap;
 }
 
-void em_ctrl_t::al_sap_io(AlServiceAccessPoint* sap)
+void em_ctrl_t::al_sap_io(void *data, bool input)
 {
-    m_ctrl_sap->execute(sap);
+    char *str = (char *)data;
+    m_ctrl_sap->execute(str);
 }

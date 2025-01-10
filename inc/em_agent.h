@@ -102,7 +102,7 @@ public:
     bool agent_output(void *data);
 
     AlServiceAccessPoint* al_sap_register(void *data, bool input = true);
-    void al_sap_io(AlServiceAccessPoint* sap);
+    void al_sap_io(void *data, bool input = true);
     
     em_agent_t();
     ~em_agent_t();

@@ -519,7 +519,7 @@ void em_ctrl_t::input_listener()
 
 #ifdef AL_SAP
     g_sap = al_sap_register(str, false);
-    al_sap_io(g_sap);
+    al_sap_io(str, false);
 #else
     // the listener must block on inputs (rbus or pipe or other ipc messages)
     io(str, false);

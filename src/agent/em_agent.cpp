@@ -516,7 +516,7 @@ void em_agent_t::input_listener()
 
 #ifdef AL_SAP
     g_sap = al_sap_register(NULL, false);
-    al_sap_io(g_sap);
+    al_sap_io(NULL);
 #else
     io(NULL);
 #endif // AL_SAP

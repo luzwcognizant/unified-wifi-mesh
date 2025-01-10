@@ -116,7 +116,13 @@ AlServiceAccessPoint* em_agent_t::al_sap_register(void *data, bool input)
     return sap;
 }
 
-void em_agent_t::al_sap_io(AlServiceAccessPoint* sap)
+void em_agent_t::al_sap_io(void *data, bool input)
 {
-    m_sap_agent->execute(sap);
+    em_long_string_t result;
+
+    if (input == true) {
+        m_sap_agent->execute(result);
+    } else {
+        agent_output(data);
+    }
 }

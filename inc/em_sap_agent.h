@@ -30,7 +30,7 @@ class em_sap_agent_t : public em_cmd_exec_t {
 public:
     static em_cmd_t m_client_cmd_spec[];
 public:
-    int execute();
+    int execute(em_long_string_t result);
     int send_result(em_cmd_out_status_t status);
 
     static em_event_t *create_event(char *buff);

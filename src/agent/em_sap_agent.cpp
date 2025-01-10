@@ -54,7 +54,7 @@ em_cmd_t em_sap_agent_t::m_client_cmd_spec[] = {
     em_cmd_t(em_cmd_type_max,em_cmd_params_t{0, {"", "", "", "", ""}, "max"}),
 };
 
-int em_sap_agent_t::execute()
+int em_sap_agent_t::execute(em_long_string_t result)
 {
     bool wait = false;
 
@@ -82,7 +82,7 @@ int em_sap_agent_t::execute()
         }
 
         if (wait == false) {
-            send_result(sap, em_cmd_out_status_other);
+            send_result(em_cmd_out_status_other);
         }
     }
 

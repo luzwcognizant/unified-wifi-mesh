@@ -43,7 +43,7 @@
 
 extern AlServiceAccessPoint* g_sap;
 
-int em_sap_ctrl_t::execute()
+int em_sap_ctrl_t::execute(em_long_string_t result)
 {
     bool wait = false;
 
@@ -71,7 +71,7 @@ int em_sap_ctrl_t::execute()
         }
 
         if (wait == false) {
-            send_result(sap, em_cmd_out_status_other);
+            send_result(em_cmd_out_status_other);
         }
     }
 
