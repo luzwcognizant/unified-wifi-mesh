@@ -640,7 +640,7 @@ int em_agent_t::data_model_init(const char *data_model_path)
         return -1;
     }
 #ifdef AL_SAP
-    m_sap_agent = new em_cmd_agent_t();
+    m_sap_agent = new em_sap_agent_t();
 #else
     m_agent_cmd = new em_cmd_agent_t();
 #endif
