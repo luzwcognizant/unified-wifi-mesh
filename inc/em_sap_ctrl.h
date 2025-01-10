@@ -23,14 +23,12 @@
 
 extern em_ctrl_t g_ctrl;
 
-class AlServiceAccessPoint;
-
 class em_sap_ctrl_t : public em_cmd_exec_t { 
     em_ctrl_t& m_ctrl = g_ctrl;
     int m_dsock;
 public:
-    int execute(AlServiceAccessPoint* sap);
-    int send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t status);
+    int execute();
+    int send_result(em_cmd_out_status_t status);
 
     em_sap_ctrl_t();
 };

@@ -24,16 +24,14 @@
 class em_agent_t;
 extern em_agent_t g_agent;
 
-class AlServiceAccessPoint;
-
 class em_sap_agent_t : public em_cmd_exec_t {
     em_agent_t& m_agent = g_agent;
     int m_dsock;
 public:
     static em_cmd_t m_client_cmd_spec[];
 public:
-    int execute(AlServiceAccessPoint* sap);
-    int send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t status);
+    int execute();
+    int send_result(em_cmd_out_status_t status);
 
     static em_event_t *create_event(char *buff);
     

@@ -42,6 +42,8 @@
 #include "em_sap_agent.h"
 #include "al_service_access_point.hpp"
 
+extern AlServiceAccessPoint* g_sap;
+
 em_cmd_t em_sap_agent_t::m_client_cmd_spec[] = {
     em_cmd_t(em_cmd_type_none,em_cmd_params_t{0, {"", "", "", "", ""}, "none"}),
     em_cmd_t(em_cmd_type_dev_init,em_cmd_params_t{1, {"", "", "", "", ""}, "wfa-dataelements:Network"}),
@@ -52,12 +54,12 @@ em_cmd_t em_sap_agent_t::m_client_cmd_spec[] = {
     em_cmd_t(em_cmd_type_max,em_cmd_params_t{0, {"", "", "", "", ""}, "max"}),
 };
 
-int em_sap_agent_t::execute(AlServiceAccessPoint* sap)
+int em_sap_agent_t::execute()
 {
     bool wait = false;
 
     while (1) {
-        AlServiceDataUnit sdu = sap->serviceAccessPointDataIndication();
+        AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
         std::cout << "Agent received the message successfully!" << std::endl;
         std::cout << "Received payload:" << std::endl;
         std::vector<unsigned char> payload = sdu.getPayload();
@@ -87,7 +89,7 @@ int em_sap_agent_t::execute(AlServiceAccessPoint* sap)
     return 0;
 }
 
-int em_sap_agent_t::send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t status)
+int em_sap_agent_t::send_result(em_cmd_out_status_t status)
 {
     em_status_string_t str; 
     char *tmp;
@@ -104,7 +106,7 @@ int em_sap_agent_t::send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t s
     }
     sdu.setPayload(payload);
 
-    sap->serviceAccessPointDataRequest(sdu);
+    g_sap->serviceAccessPointDataRequest(sdu);
     std::cout << "Agent sent the message successfully!" << std::endl;
     std::cout << "Sent payload:" << std::endl;
     for (auto byte : payload) {

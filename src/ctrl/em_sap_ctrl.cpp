@@ -41,12 +41,14 @@
 #include "em_sap_ctrl.h"
 #include "al_service_access_point.hpp"
 
-int em_sap_ctrl_t::execute(AlServiceAccessPoint* sap)
+extern AlServiceAccessPoint* g_sap;
+
+int em_sap_ctrl_t::execute()
 {
     bool wait = false;
 
     while (1) {
-        AlServiceDataUnit sdu = sap->serviceAccessPointDataIndication();
+        AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
         std::cout << "Ctrl received the message successfully!" << std::endl;
         std::cout << "Received payload:" << std::endl;
         std::vector<unsigned char> payload = sdu.getPayload();
@@ -76,7 +78,7 @@ int em_sap_ctrl_t::execute(AlServiceAccessPoint* sap)
     return 0;
 }
 
-int em_sap_ctrl_t::send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t status)
+int em_sap_ctrl_t::send_result(em_cmd_out_status_t status)
 {
     em_status_string_t str; 
     char *tmp;
@@ -93,7 +95,7 @@ int em_sap_ctrl_t::send_result(AlServiceAccessPoint* sap, em_cmd_out_status_t st
     }
     sdu.setPayload(payload);
 
-    sap->serviceAccessPointDataRequest(sdu);
+    g_sap->serviceAccessPointDataRequest(sdu);
     std::cout << "Ctrl sent the message successfully!" << std::endl;
     std::cout << "Sent payload:" << std::endl;
     for (auto byte : payload) {
