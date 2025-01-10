@@ -36,6 +36,7 @@
 #include "em_msg.h"
 #include "ieee80211.h"
 #include "em_cmd_agent.h"
+#include "em_sap_agent.h"
 #include "em_orch_agent.h"
 #include "util.h"
 
