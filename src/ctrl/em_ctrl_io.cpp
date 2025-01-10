@@ -76,7 +76,7 @@ void em_ctrl_t::io(void *data, bool input)
     m_ctrl_cmd->execute(str);
 }
 
-AlServiceAccessPoint* em_ctrl_t::al_sap_register(void *data, bool input)
+AlServiceAccessPoint* em_ctrl_t::al_sap_register()
 {
     std::string customSocketPath = SOCKET_PATH;
     AlServiceAccessPoint* sap = new AlServiceAccessPoint(customSocketPath);

@@ -78,7 +78,7 @@ public:
     void io(void *data, bool input = true);
     bool io_process(em_event_t *evt);
 
-    AlServiceAccessPoint* al_sap_register(void *data, bool input = true);
+    AlServiceAccessPoint* al_sap_register();
     void al_sap_io(void *data, bool input = true);
 
     dm_easy_mesh_t *get_data_model(const char *net_id, const unsigned char *al_mac = NULL) { return m_data_model.get_data_model(net_id, al_mac); }

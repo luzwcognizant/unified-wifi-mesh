@@ -92,7 +92,7 @@ void em_agent_t::io(void *data, bool input)
     }
 }
 
-AlServiceAccessPoint* em_agent_t::al_sap_register(void *data, bool input)
+AlServiceAccessPoint* em_agent_t::al_sap_register()
 {
     std::string customSocketPath = SOCKET_PATH;
     AlServiceAccessPoint* sap = new AlServiceAccessPoint(customSocketPath);

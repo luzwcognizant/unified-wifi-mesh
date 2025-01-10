@@ -515,7 +515,6 @@ void em_agent_t::input_listener()
     }
 
 #ifdef AL_SAP
-    g_sap = al_sap_register(NULL, false);
     al_sap_io(NULL);
 #else
     io(NULL);
@@ -864,6 +863,10 @@ em_agent_t::~em_agent_t()
 
 int main(int argc, const char *argv[])
 {
+#ifdef AL_SAP
+    g_sap = g_agent.al_sap_register();
+#endif
+
     if (g_agent.init(argv[1]) == 0) {
         g_agent.start();
     }

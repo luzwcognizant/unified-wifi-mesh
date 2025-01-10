@@ -518,7 +518,6 @@ void em_ctrl_t::input_listener()
     em_long_string_t str;
 
 #ifdef AL_SAP
-    g_sap = al_sap_register(str, false);
     al_sap_io(str, false);
 #else
     // the listener must block on inputs (rbus or pipe or other ipc messages)
@@ -842,6 +841,10 @@ em_ctrl_t::~em_ctrl_t()
 
 int main(int argc, const char *argv[])
 {
+#ifdef AL_SAP
+    g_sap = g_ctrl.al_sap_register();
+#endif
+
     if (g_ctrl.init(argv[1]) == 0) {
         g_ctrl.start();
     }
