@@ -57,6 +57,9 @@ em_cmd_t em_sap_agent_t::m_client_cmd_spec[] = {
 int em_sap_agent_t::execute(em_long_string_t result)
 {
     bool wait = false;
+    unsigned char *tmp;
+
+    m_cmd.reset();
 
     while (1) {
         AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
@@ -68,8 +71,8 @@ int em_sap_agent_t::execute(em_long_string_t result)
         }
         std::cout << std::dec << std::endl;
 
-        em_event_t *tmp = get_event();
-        memcpy(tmp, payload.data(), payload.size() * sizeof(unsigned char));
+        tmp = (unsigned char *)get_event();
+        memcpy(tmp, payload.data(), sizeof(em_event_t));
 
         switch (get_event()->type) {
             case em_event_type_bus:
@@ -84,6 +87,8 @@ int em_sap_agent_t::execute(em_long_string_t result)
         if (wait == false) {
             send_result(em_cmd_out_status_other);
         }
+
+        m_cmd.reset();
     }
 
     return 0;
@@ -92,16 +97,18 @@ int em_sap_agent_t::execute(em_long_string_t result)
 int em_sap_agent_t::send_result(em_cmd_out_status_t status)
 {
     em_status_string_t str; 
-    char *tmp;
+    unsigned char *tmp;
+    unsigned int tmp_sz;
 
-    tmp = m_cmd.status_to_string(status, str);
+    tmp = (unsigned char *)m_cmd.status_to_string(status, str);
+    tmp_sz = sizeof(tmp)/sizeof(*tmp);
 
     AlServiceDataUnit sdu;
     sdu.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
     sdu.setDestinationAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
 
     std::vector<unsigned char> payload;
-    for (int i = 0; i < strlen(tmp); i++) {
+    for (int i = 0; i < tmp_sz; i++) {
         payload.push_back(tmp[i]);
     }
     sdu.setPayload(payload);

@@ -122,17 +122,22 @@ char *em_cmd_exec_t::get_path_from_dst_service(em_service_type_t to_svc, em_long
 int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigned int in_len, char *out, unsigned int out_len)
 {
 #ifdef AL_SAP
-    AlServiceDataUnit sdu;
-    sdu.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
-    sdu.setDestinationAlMacAddress({0x66, 0x66, 0x66, 0x66, 0x66, 0x66});
+    AlServiceDataUnit sdu_in;
+    if (to_svc == em_service_type_agent) {
+        sdu_in.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
+        sdu_in.setDestinationAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
+    } else if (to_svc == em_service_type_ctrl) {
+        sdu_in.setSourceAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
+        sdu_in.setDestinationAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
+    }
 
     std::vector<unsigned char> in_payload;
-    for (int i = 0; i < strlen((char*)in); i++) {
+    for (unsigned int i = 0; i < in_len; i++) {
         in_payload.push_back(in[i]);
     }
-    sdu.setPayload(in_payload);
+    sdu_in.setPayload(in_payload);
 
-    g_sap->serviceAccessPointDataRequest(sdu);
+    g_sap->serviceAccessPointDataRequest(sdu_in);
     std::cout << "Sent cmd successfull!" << std::endl;
     std::cout << "Sent cmd:" << std::endl;
     for (auto byte : in_payload) {
@@ -140,8 +145,8 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
     }
     std::cout << std::dec << std::endl;
 
-    AlServiceDataUnit receivedData = g_sap->serviceAccessPointDataIndication();
-    std::vector<unsigned char> out_payload = receivedData.getPayload();
+    AlServiceDataUnit sdu_out = g_sap->serviceAccessPointDataIndication();
+    std::vector<unsigned char> out_payload = sdu_out.getPayload();
     std::cout << "Received cmd successfull!" << std::endl;
     std::cout << "Received cmd:" << std::endl;
     for (auto byte : out_payload) {
@@ -149,7 +154,7 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
     }
     std::cout << std::dec << std::endl;
 
-    memcpy(out, out_payload.data(), out_payload.size() * sizeof(unsigned char));
+    memcpy(out, out_payload.data(), out_len);
 #else
     struct sockaddr_un addr;
     int dsock, ret;
