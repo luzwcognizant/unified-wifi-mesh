@@ -51,7 +51,7 @@ int em_sap_ctrl_t::execute(em_long_string_t result)
      m_cmd.reset();
 
     while (1) {
-        AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
+        AlServiceDataUnit sdu = g_sap->receiveEventData();
         std::cout << "Ctrl received the message successfully!" << std::endl;
         std::cout << "Received payload:" << std::endl;
         std::vector<unsigned char> payload = sdu.getPayload();
@@ -86,23 +86,21 @@ int em_sap_ctrl_t::execute(em_long_string_t result)
 int em_sap_ctrl_t::send_result(em_cmd_out_status_t status)
 {
     em_status_string_t str; 
-    unsigned char *tmp;
-    unsigned int tmp_sz;
+    char *tmp;
 
-    tmp = (unsigned char *)m_cmd.status_to_string(status, str);
-    tmp_sz = sizeof(tmp)/sizeof(*tmp);
+    tmp = m_cmd.status_to_string(status, str);
 
     AlServiceDataUnit sdu;
     sdu.setSourceAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
     sdu.setDestinationAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
 
     std::vector<unsigned char> payload;
-    for (int i = 0; i < tmp_sz; i++) {
+    for (int i = 0; i < strlen(tmp); i++) {
         payload.push_back(tmp[i]);
     }
     sdu.setPayload(payload);
 
-    g_sap->serviceAccessPointDataRequest(sdu);
+    g_sap->sendEventData(sdu);
     std::cout << "Ctrl sent the message successfully!" << std::endl;
     std::cout << "Sent payload:" << std::endl;
     for (auto byte : payload) {

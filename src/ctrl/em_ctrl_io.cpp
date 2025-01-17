@@ -83,10 +83,10 @@ AlServiceAccessPoint* em_ctrl_t::al_sap_register()
 
     AlServiceRegistrationRequest registrationRequest(ServiceOperation::SO_ENABLE, ServiceType::SAP_TUNNEL_CLIENT);
     sap->serviceAccessPointRegistrationRequest(registrationRequest);
-    std::cout << "Ctrl sent the registration request successfully!";
+    std::cout << "Ctrl sent the registration request successfully!" << std::endl;
 
     AlServiceRegistrationResponse registrationResponse = sap->serviceAccessPointRegistrationResponse();
-    std::cout << "Ctrl received the registration response successfully!";
+    std::cout << "Ctrl received the registration response successfully!" << std::endl;
 
     std::cout << "Registration completed with MAC Address: ";
     for (auto byte : registrationResponse.getAlMacAddressLocal()) {

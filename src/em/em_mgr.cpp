@@ -238,6 +238,18 @@ void em_mgr_t::nodes_listener()
         em = (em_t *)hash_map_get_first(m_em_map);
         while (em != NULL) {
             if (em->is_al_interface_em() == true) {
+#ifdef AL_SAP
+                AlServiceDataUnit sdu = g_sap->receiveTLVData();
+                std::cout << "Ctrl received the message successfully!" << std::endl;
+                std::cout << "Received payload:" << std::endl;
+                std::vector<unsigned char> payload = sdu.getPayload();
+                for (auto byte : payload) {
+                    std::cout << std::hex << static_cast<int>(byte) << " ";
+                }
+                std::cout << std::dec << std::endl;
+                hdr = (em_raw_hdr_t *)buff;
+                proto_process(buff, len, em);
+#else
 				pthread_mutex_lock(&m_mutex);
 				ret = FD_ISSET(em->get_fd(), &m_rset);
 				pthread_mutex_unlock(&m_mutex);
@@ -250,6 +262,7 @@ void em_mgr_t::nodes_listener()
                         proto_process(buff, len, em);
                     }
                 }
+#endif
             }
             em = (em_t *)hash_map_get_next(m_em_map, em);
         }
@@ -259,8 +272,6 @@ void em_mgr_t::nodes_listener()
         highest_fd = reset_listeners();
 
     }
-
-
 }
 
 

@@ -97,18 +97,16 @@ int em_sap_agent_t::execute(em_long_string_t result)
 int em_sap_agent_t::send_result(em_cmd_out_status_t status)
 {
     em_status_string_t str; 
-    unsigned char *tmp;
-    unsigned int tmp_sz;
+    char *tmp;
 
-    tmp = (unsigned char *)m_cmd.status_to_string(status, str);
-    tmp_sz = sizeof(tmp)/sizeof(*tmp);
+    tmp = m_cmd.status_to_string(status, str);
 
     AlServiceDataUnit sdu;
     sdu.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
     sdu.setDestinationAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
 
     std::vector<unsigned char> payload;
-    for (int i = 0; i < tmp_sz; i++) {
+    for (int i = 0; i < strlen(tmp); i++) {
         payload.push_back(tmp[i]);
     }
     sdu.setPayload(payload);
