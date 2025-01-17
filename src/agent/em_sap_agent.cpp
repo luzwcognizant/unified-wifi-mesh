@@ -62,7 +62,7 @@ int em_sap_agent_t::execute(em_long_string_t result)
     m_cmd.reset();
 
     while (1) {
-        AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
+        AlServiceDataUnit sdu = g_sap->receiveEventData();
         std::cout << "Agent received the message successfully!" << std::endl;
         std::cout << "Received payload:" << std::endl;
         std::vector<unsigned char> payload = sdu.getPayload();
@@ -111,7 +111,7 @@ int em_sap_agent_t::send_result(em_cmd_out_status_t status)
     }
     sdu.setPayload(payload);
 
-    g_sap->serviceAccessPointDataRequest(sdu);
+    g_sap->sendEventData(sdu);
     std::cout << "Agent sent the message successfully!" << std::endl;
     std::cout << "Sent payload:" << std::endl;
     for (auto byte : payload) {

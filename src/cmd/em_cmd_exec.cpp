@@ -137,7 +137,7 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
     }
     sdu_in.setPayload(in_payload);
 
-    g_sap->serviceAccessPointDataRequest(sdu_in);
+    g_sap->sendEventData(sdu_in);
     std::cout << "Sent cmd successfull!" << std::endl;
     std::cout << "Sent cmd:" << std::endl;
     for (auto byte : in_payload) {
@@ -145,7 +145,7 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
     }
     std::cout << std::dec << std::endl;
 
-    AlServiceDataUnit sdu_out = g_sap->serviceAccessPointDataIndication();
+    AlServiceDataUnit sdu_out = g_sap->receiveEventData();
     std::vector<unsigned char> out_payload = sdu_out.getPayload();
     std::cout << "Received cmd successfull!" << std::endl;
     std::cout << "Received cmd:" << std::endl;
