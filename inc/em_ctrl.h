@@ -80,6 +80,7 @@ public:
 
     AlServiceAccessPoint* al_sap_register();
     void al_sap_io(void *data, bool input = true);
+    void al_sap_process_event(unsigned char * buff);
 
     dm_easy_mesh_t *get_data_model(const char *net_id, const unsigned char *al_mac = NULL) { return m_data_model.get_data_model(net_id, al_mac); }
     dm_easy_mesh_t *create_data_model(const char *net_id, const unsigned char *al_mac, em_profile_type_t profile = em_profile_type_3) { return m_data_model.create_data_model(net_id, al_mac, profile); }

@@ -28,6 +28,7 @@ class em_sap_ctrl_t : public em_cmd_exec_t {
     int m_dsock;
 public:
     int execute(em_long_string_t result);
+    void process_event(unsigned char * buff);
     int send_result(em_cmd_out_status_t status);
 
     em_sap_ctrl_t();

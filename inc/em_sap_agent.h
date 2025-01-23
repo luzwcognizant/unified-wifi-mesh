@@ -31,6 +31,7 @@ public:
     static em_cmd_t m_client_cmd_spec[];
 public:
     int execute(em_long_string_t result);
+    void process_event(unsigned char * buff);
     int send_result(em_cmd_out_status_t status);
 
     static em_event_t *create_event(char *buff);

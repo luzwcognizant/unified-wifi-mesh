@@ -78,6 +78,8 @@ public:
 
     virtual em_service_type_t get_service_type() = 0;
 
+    virtual void al_sap_process_event(unsigned char * buff) = 0;
+
     em_mgr_t();
     ~em_mgr_t();
 };

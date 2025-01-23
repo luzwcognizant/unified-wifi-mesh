@@ -523,7 +523,7 @@ int em_t::send_frame(unsigned char *buff, unsigned int len, bool multicast)
     }
     sdu.setPayload(payload);
 
-    g_sap->sendTLVData(sdu);
+    g_sap->serviceAccessPointDataRequest(sdu);
     std::cout << "Sent frame successfull!" << std::endl;
     std::cout << "Sent frame:" << std::endl;
     for (auto byte : payload) {

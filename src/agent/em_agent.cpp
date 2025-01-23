@@ -653,6 +653,11 @@ int em_agent_t::orch_init()
     return 0;
 }
 
+void em_agent_t::al_sap_process_event(unsigned char * buff)
+{
+    m_sap_agent->process_event(buff);
+}
+
 em_t *em_agent_t::find_em_for_msg_type(unsigned char *data, unsigned int len, em_t *al_em)
 {
     em_raw_hdr_t *hdr;

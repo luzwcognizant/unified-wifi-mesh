@@ -43,7 +43,9 @@
 #include "em.h"
 #include "em_mgr.h"
 #include "em_msg.h"
+#include "al_service_access_point.hpp"
 
+extern AlServiceAccessPoint* g_sap;
 extern char *global_netid;
 
 void em_mgr_t::proto_process(unsigned char *data, unsigned int len, em_t *al_em)
@@ -51,17 +53,22 @@ void em_mgr_t::proto_process(unsigned char *data, unsigned int len, em_t *al_em)
     em_event_t	*evt;
     em_t *em = NULL;
 
-	em = find_em_for_msg_type(data, len, al_em);
-	if (em == NULL) {
-		return;
-	}
-
-    evt = (em_event_t *)malloc(sizeof(em_event_t));
-    evt->type = em_event_type_frame;
-    evt->u.fevt.frame = (unsigned char *)malloc(len);
-    memcpy(evt->u.fevt.frame, data, len);
-    evt->u.fevt.len = len;
-    em->push_to_queue(evt);
+    if (strncmp((char*)&data[0], "{", 1) == 0) {
+        std::cout << "proto_process event" << std::endl;
+        al_sap_process_event(data);
+    } else {
+        std::cout << "proto_process frame" << std::endl;
+        em = find_em_for_msg_type(data, len, al_em);
+        if (em == NULL) {
+            return;
+	    }
+        evt = (em_event_t *)malloc(sizeof(em_event_t));
+        evt->type = em_event_type_frame;
+        evt->u.fevt.frame = (unsigned char *)malloc(len);
+        memcpy(evt->u.fevt.frame, data, len);
+        evt->u.fevt.len = len;
+        em->push_to_queue(evt);
+    }
 }
 
 void em_mgr_t::delete_nodes()
@@ -239,16 +246,15 @@ void em_mgr_t::nodes_listener()
         while (em != NULL) {
             if (em->is_al_interface_em() == true) {
 #ifdef AL_SAP
-                AlServiceDataUnit sdu = g_sap->receiveTLVData();
-                std::cout << "Ctrl received the message successfully!" << std::endl;
+                AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
+                std::cout << "Received the frame successfully!" << std::endl;
                 std::cout << "Received payload:" << std::endl;
                 std::vector<unsigned char> payload = sdu.getPayload();
                 for (auto byte : payload) {
                     std::cout << std::hex << static_cast<int>(byte) << " ";
                 }
                 std::cout << std::dec << std::endl;
-                hdr = (em_raw_hdr_t *)buff;
-                proto_process(buff, len, em);
+                proto_process(payload.data(), payload.size(), em);
 #else
 				pthread_mutex_lock(&m_mutex);
 				ret = FD_ISSET(em->get_fd(), &m_rset);

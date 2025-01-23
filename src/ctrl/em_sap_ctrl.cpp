@@ -51,7 +51,7 @@ int em_sap_ctrl_t::execute(em_long_string_t result)
      m_cmd.reset();
 
     while (1) {
-        AlServiceDataUnit sdu = g_sap->receiveEventData();
+        /*AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
         std::cout << "Ctrl received the message successfully!" << std::endl;
         std::cout << "Received payload:" << std::endl;
         std::vector<unsigned char> payload = sdu.getPayload();
@@ -77,10 +77,34 @@ int em_sap_ctrl_t::execute(em_long_string_t result)
             send_result(em_cmd_out_status_other);
         }
 
-         m_cmd.reset();
+         m_cmd.reset();*/
     }
 
     return 0;
+}
+
+void em_sap_ctrl_t::process_event(unsigned char * buff)
+{
+    std::cout << "Controller process event" << std::endl;
+    bool wait = false;
+    unsigned char *tmp = (unsigned char *)get_event();
+    memcpy(tmp, buff, sizeof(em_event_t));
+
+    switch (get_event()->type) {
+        case em_event_type_bus:
+            wait = m_ctrl.io_process(get_event());
+            break;
+
+        default:
+            wait = false;
+            break;
+    }
+
+    if (wait == false) {
+        send_result(em_cmd_out_status_other);
+    }
+
+    m_cmd.reset();
 }
 
 int em_sap_ctrl_t::send_result(em_cmd_out_status_t status)
@@ -100,7 +124,7 @@ int em_sap_ctrl_t::send_result(em_cmd_out_status_t status)
     }
     sdu.setPayload(payload);
 
-    g_sap->sendEventData(sdu);
+    g_sap->serviceAccessPointDataRequest(sdu);
     std::cout << "Ctrl sent the message successfully!" << std::endl;
     std::cout << "Sent payload:" << std::endl;
     for (auto byte : payload) {

@@ -103,6 +103,7 @@ public:
 
     AlServiceAccessPoint* al_sap_register();
     void al_sap_io(void *data, bool input = true);
+    void al_sap_process_event(unsigned char * buff);
     
     em_agent_t();
     ~em_agent_t();
