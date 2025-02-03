@@ -42,6 +42,7 @@
 #include "al_service_access_point.hpp"
 
 extern AlServiceAccessPoint* g_sap;
+em_service_type_t service_type;
 
 void em_cmd_exec_t::wait(struct timespec *time_to_wait)
 {
@@ -124,11 +125,23 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
 #ifdef AL_SAP
     AlServiceDataUnit sdu_in;
     if (to_svc == em_service_type_agent) {
-        sdu_in.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
-        sdu_in.setDestinationAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
-    } else if (to_svc == em_service_type_ctrl) {
-        sdu_in.setSourceAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
+        if (service_type == em_service_type_agent) {
+            std::cout << "Sent cmd from agent to agent" << std::endl;
+            sdu_in.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
+        } else {
+            std::cout << "Sent cmd from ctrl to agent" << std::endl;
+            sdu_in.setSourceAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
+        }
         sdu_in.setDestinationAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
+    } else if (to_svc == em_service_type_ctrl) {
+        if (service_type == em_service_type_agent) {
+            std::cout << "Sent cmd from agent to ctrl" << std::endl;
+            sdu_in.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
+        } else {
+            std::cout << "Sent cmd from ctrl to ctrl" << std::endl;
+            sdu_in.setSourceAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
+        }
+        sdu_in.setDestinationAlMacAddress({0x22, 0x22, 0x22, 0x22, 0x22, 0x22});
     }
 
     std::vector<unsigned char> in_payload;
@@ -144,6 +157,10 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
         std::cout << std::hex << static_cast<int>(byte) << " ";
     }
     std::cout << std::dec << std::endl;
+
+    if (out == NULL) {
+        return 0;
+    }
 
     AlServiceDataUnit sdu_out = g_sap->serviceAccessPointDataIndication();
     std::vector<unsigned char> out_payload = sdu_out.getPayload();
@@ -183,6 +200,13 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
         close(dsock);
         return -1;
     }
+    std::cout << "Sent cmd successfull!" << std::endl;
+    std::cout << "Sent cmd:" << std::endl;
+    for (int i = 0; i < in_len; i++) {
+        std::cout << std::hex << static_cast<int>(in[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
+
     if (out == NULL) {
         close(dsock);
         return 0;
@@ -193,6 +217,12 @@ int em_cmd_exec_t::send_cmd(em_service_type_t to_svc, unsigned char *in, unsigne
         close(dsock);
         return -1;
     }
+    std::cout << "Received cmd successfull!" << std::endl;
+    std::cout << "Received cmd:" << std::endl;
+    for (int i = 0; i < out_len; i++) {
+        std::cout << std::hex << static_cast<int>(out[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
     close(dsock);
 #endif //AL_SAP
     return 0;

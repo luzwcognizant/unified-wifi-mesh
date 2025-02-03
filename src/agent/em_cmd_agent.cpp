@@ -40,6 +40,8 @@
 #include <cjson/cJSON.h>
 #include "em_agent.h"
 #include "em_cmd_agent.h"
+#include <iostream>
+#include <sys/types.h>
 
 em_cmd_t em_cmd_agent_t::m_client_cmd_spec[] = {
     em_cmd_t(em_cmd_type_none,em_cmd_params_t{0, {"", "", "", "", ""}, "none"}),
@@ -60,6 +62,7 @@ int em_cmd_agent_t::execute(em_long_string_t result)
     bool wait = false;
 
     m_cmd.reset();
+    
 
     unlink(get_path());
 
@@ -90,6 +93,12 @@ int em_cmd_agent_t::execute(em_long_string_t result)
             continue;
         }
 
+        pid_t peer_pid;
+        socklen_t peer_pid_len = sizeof(peer_pid);
+        if (getsockopt(m_dsock, SOL_SOCKET, SO_PEERCRED, &peer_pid, &peer_pid_len) == 0) {
+            std::cout << "Received data from PID " << peer_pid << std::endl;
+        }
+
         setsockopt(m_dsock, SOL_SOCKET, SO_SNDBUF, &sz, sizeof(sz)); // Send buffer 1K
         setsockopt(m_dsock, SOL_SOCKET, SO_RCVBUF, &sz, sizeof(sz)); // Receive buffer 1K
 
@@ -101,6 +110,10 @@ int em_cmd_agent_t::execute(em_long_string_t result)
             printf("%s:%d: listen error on socket, err:%d\n", __func__, __LINE__, errno);
             break;
         }
+
+        printf("%s:%d: Read bytes: %d Size: %d Name: %s Buff: %s\n", __func__, __LINE__, ret, 
+        			get_event()->u.bevt.u.subdoc.sz, get_event()->u.bevt.u.subdoc.name, get_event()->u.bevt.u.subdoc.buff);
+        printf("%s:%d: Read bytes: %d\n", __func__, __LINE__, ret);
 
         switch (get_event()->type) {
             case em_event_type_bus:
@@ -137,6 +150,9 @@ int em_cmd_agent_t::send_result(em_cmd_out_status_t status)
     if ((ret = send(m_dsock, tmp, sizeof(em_status_string_t), 0)) <= 0) {
         printf("%s:%d: write error on socket, err:%d\n", __func__, __LINE__, errno);
     }
+
+    std::cout << "Agent sent the message successfully!" << std::endl;
+    std::cout << "Sent payload: " << tmp << std::endl;
 
     close(m_dsock);
 

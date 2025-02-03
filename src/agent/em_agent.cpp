@@ -527,7 +527,7 @@ int em_agent_t::mgmt_action_frame_cb(char *event_name, raw_data_t *data)
     em_event_t evt;
     struct ieee80211_mgmt *btm_frame = (struct ieee80211_mgmt *)data->raw_data.bytes;
 
-    //printf("Received Frame data for event %s \n", event_name);
+    printf("Received Frame data for event %s \n", event_name);
     if(btm_frame->u.action.u.bss_tm_resp.action == WLAN_WNM_BTM_RESPONSE)
     {
         bevt = &evt.u.bevt;
@@ -544,7 +544,7 @@ int em_agent_t::mgmt_action_frame_cb(char *event_name, raw_data_t *data)
 
 int em_agent_t::assoc_stats_cb(char *event_name, raw_data_t *data)
 {
-    //printf("%s:%d recv data:\r\n%s\r\n", __func__, __LINE__, (char *)data->raw_data.bytes);
+    printf("%s:%d recv data:\r\n%s\r\n", __func__, __LINE__, (char *)data->raw_data.bytes);
     em_event_t evt;
     em_bus_event_t *bevt;
     cJSON *json, *assoc_stats_arr;
@@ -572,7 +572,7 @@ int em_agent_t::assoc_stats_cb(char *event_name, raw_data_t *data)
 
 int em_agent_t::sta_cb(char *event_name, raw_data_t *data)
 {
-    //printf("%s:%d Recv data from onewifi:\r\n%s\r\n", __func__, __LINE__, (char *)data->raw_data.bytes);
+    printf("%s:%d Recv data from onewifi:\r\n%s\r\n", __func__, __LINE__, (char *)data->raw_data.bytes);
     em_event_t evt;
     em_bus_event_t *bevt;
 
@@ -591,7 +591,7 @@ int em_agent_t::onewifi_cb(char *event_name, raw_data_t *data)
 	const char *json_data = (char *)data->raw_data.bytes;
 	cJSON *json = cJSON_Parse(json_data);
 
-	//printf("%s:%dRecv data from onewifi:\r\n%s\r\n", __func__, __LINE__, (char *)data->raw_data.bytes);
+	printf("%s:%dRecv data from onewifi:\r\n%s\r\n", __func__, __LINE__, (char *)data->raw_data.bytes);
 
 	if (json == NULL) {
 		printf("%s:%d Error parsing JSON\n", __func__, __LINE__);
@@ -868,7 +868,7 @@ em_agent_t::~em_agent_t()
 
 int main(int argc, const char *argv[])
 {
-#ifdef AL_SAP
+#ifndef AL_SAP
     g_sap = g_agent.al_sap_register();
 #endif
 

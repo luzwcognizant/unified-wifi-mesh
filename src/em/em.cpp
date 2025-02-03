@@ -50,6 +50,7 @@
 #include "em_cmd.h"
 #include "em_cmd_exec.h"
 #include "al_service_access_point.hpp"
+#include <thread>
 
 extern AlServiceAccessPoint* g_sap;
 
@@ -465,7 +466,7 @@ int em_t::set_bp_filter()
 
 int em_t::start_al_interface()
 {
-#ifdef AL_SAP
+#ifndef AL_SAP
     m_fd = g_sap->getSocketDescriptor();
 #else
     int optval = 1, sock_fd;
@@ -507,7 +508,7 @@ int em_t::send_cmd(em_cmd_type_t type, em_service_type_t svc, unsigned char *buf
 int em_t::send_frame(unsigned char *buff, unsigned int len, bool multicast)
 {
     int ret = 0;
-#ifdef AL_SAP
+#ifndef AL_SAP
     AlServiceDataUnit sdu;
     if (m_service_type == em_service_type_agent) {
         sdu.setSourceAlMacAddress({0x11, 0x11, 0x11, 0x11, 0x11, 0x11});
@@ -518,16 +519,17 @@ int em_t::send_frame(unsigned char *buff, unsigned int len, bool multicast)
     }
 
     std::vector<unsigned char> payload;
+    //payload.push_back(0xff);
     for (unsigned int i = 0; i < len; i++) {
         payload.push_back(buff[i]);
     }
     sdu.setPayload(payload);
 
     g_sap->serviceAccessPointDataRequest(sdu);
-    std::cout << "Sent frame successfull!" << std::endl;
-    std::cout << "Sent frame:" << std::endl;
+    std::cout << "Sent frame successfull! sap tid = " << std::this_thread::get_id() << std::endl;
+    std::cout << "Sent frame sap [2]:" << std::endl;
     for (auto byte : payload) {
-        std::cout << std::hex << static_cast<int>(byte) << " ";
+        std::cout << std::hex << "[2]" << static_cast<int>(byte) << " ";
     }
     std::cout << std::dec << std::endl;
 #else
@@ -551,6 +553,12 @@ int em_t::send_frame(unsigned char *buff, unsigned int len, bool multicast)
     memcpy(sadr_ll.sll_addr, (multicast == true) ? multi_addr:hdr->dst, sizeof(mac_address_t));
 
     ret = sendto(sock, buff, len, 0, (const struct sockaddr*)&sadr_ll, sizeof(struct sockaddr_ll));   
+    std::cout << "Sent frame successfull! no sap tid = " << std::this_thread::get_id() << std::endl;
+    std::cout << "Sent frame no sap:" << std::endl;
+    for (int i = 0; i < len; i++) {
+        std::cout << std::hex << static_cast<int>(buff[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
 
     close(sock);
 #endif

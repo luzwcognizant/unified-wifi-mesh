@@ -46,6 +46,7 @@
 #include "em_crypto.h"
 #include "em.h"
 #include "em_cmd_exec.h"
+#include <iostream>
 
 // Initialize the static member variables
 unsigned short em_configuration_t::msg_id = 0;
@@ -2297,7 +2298,7 @@ int em_configuration_t::handle_autoconfig_wsc_m2(unsigned char *buff, unsigned i
     dm_easy_mesh_t *dm;
     dm_network_t network;
     em_raw_hdr_t *hdr = (em_raw_hdr_t *)buff;
-
+std::cout << "em_configuration_t::handle_autoconfig_wsc_m2" << std::endl;
     if (em_msg_t(em_msg_type_autoconf_wsc, m_peer_profile, buff, len).validate(errors) == 0) {
         printf("%s:%d: received wsc m2 msg failed validation\n", __func__, __LINE__);
 
@@ -2352,7 +2353,7 @@ int em_configuration_t::handle_autoconfig_wsc_m2(unsigned char *buff, unsigned i
         printf("%s:%d: Error in decrypting settings\n", __func__, __LINE__);
         return -1;
     }
-
+std::cout << "em_configuration_t::handle_autoconfig_wsc_m2 1" << std::endl;
     dm = get_data_model();
     //Commit controller mac address
     if ((dm != NULL) && (hdr != NULL)) {
@@ -2772,6 +2773,9 @@ int em_configuration_t::handle_autoconfig_resp(unsigned char *buff, unsigned int
     }
     em_printf("autoconfig wsc m1 send successful");
     printf("%s:%d: autoconfig wsc m1 send success\n", __func__, __LINE__);
+#ifndef AL_SAP
+    sleep(1);
+#endif
     set_state(em_state_agent_wsc_m2_pending);
 
     return 0;   
@@ -2870,6 +2874,8 @@ void em_configuration_t::process_msg(unsigned char *data, unsigned int len)
     tlvs = data + sizeof(em_raw_hdr_t) + sizeof(em_cmdu_t);
     tlvs_len = len - (sizeof(em_raw_hdr_t) - sizeof(em_cmdu_t));
 
+
+
     switch (htons(cmdu->type)) {
         case em_msg_type_autoconf_search:
             if (get_service_type() == em_service_type_ctrl) {
@@ -2888,11 +2894,16 @@ void em_configuration_t::process_msg(unsigned char *data, unsigned int len)
             break;
 
         case em_msg_type_autoconf_wsc:
+            std::cout << "em_configuration_t::process_msg" << std::endl;
+            std::cout << "em_configuration_t::process_msg state = " << get_state() << std::endl;
+            std::cout << "em_configuration_t::process_msg msg_type = " << get_wsc_msg_type(tlvs, tlvs_len) << std::endl;
             if ((get_wsc_msg_type(tlvs, tlvs_len) == em_wsc_msg_type_m2) &&
                     (get_service_type() == em_service_type_agent) && (get_state() == em_state_agent_wsc_m2_pending)) {
+                        std::cout << "em_configuration_t::process_msg 1" << std::endl;
                 handle_autoconfig_wsc_m2(data, len);              
             } else if ((get_wsc_msg_type(tlvs, tlvs_len) == em_wsc_msg_type_m1) &&
                     (get_service_type() == em_service_type_ctrl) && (get_state() == em_state_ctrl_wsc_m1_pending))  {
+                        std::cout << "em_configuration_t::process_msg 2" << std::endl;
                 handle_autoconfig_wsc_m1(data, len);
             }
 

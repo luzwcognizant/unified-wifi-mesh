@@ -846,7 +846,7 @@ em_ctrl_t::~em_ctrl_t()
 
 int main(int argc, const char *argv[])
 {
-#ifdef AL_SAP
+#ifndef AL_SAP
     g_sap = g_ctrl.al_sap_register();
 #endif
 

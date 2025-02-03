@@ -203,8 +203,8 @@ typedef unsigned char em_dh5_key_t[192];    // because this is DH group 5 (1536 
 typedef mac_address_t em_radio_id_t;
 typedef unsigned char em_bssid_id_t[6];
 typedef char    em_short_string_t[32];
-typedef char    em_long_string_t[64];
 typedef char    em_string_t[16];
+typedef char    em_long_string_t[64];
 typedef char    em_small_string_t[8];
 typedef char    em_tiny_string_t[4];
 typedef char    em_subdoc_name_space_t[64];

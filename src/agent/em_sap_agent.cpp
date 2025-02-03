@@ -41,8 +41,11 @@
 #include "em_agent.h"
 #include "em_sap_agent.h"
 #include "al_service_access_point.hpp"
+#include <chrono>
+#include <thread>
 
 extern AlServiceAccessPoint* g_sap;
+extern em_service_type_t service_type;
 
 em_cmd_t em_sap_agent_t::m_client_cmd_spec[] = {
     em_cmd_t(em_cmd_type_none,em_cmd_params_t{0, {"", "", "", "", ""}, "none"}),
@@ -60,6 +63,7 @@ int em_sap_agent_t::execute(em_long_string_t result)
     unsigned char *tmp;
 
     m_cmd.reset();
+    service_type = em_service_type_agent;
 
     while (1) {
         /*AlServiceDataUnit sdu = g_sap->serviceAccessPointDataIndication();
@@ -89,6 +93,7 @@ int em_sap_agent_t::execute(em_long_string_t result)
         }
 
         m_cmd.reset();*/
+        sleep(1);
     }
 
     return 0;
@@ -112,7 +117,7 @@ void em_sap_agent_t::process_event(unsigned char * buff)
     }
 
     if (wait == false) {
-        send_result(em_cmd_out_status_other);
+        //send_result(em_cmd_out_status_other);
     }
 
     m_cmd.reset();
@@ -142,6 +147,8 @@ int em_sap_agent_t::send_result(em_cmd_out_status_t status)
         std::cout << std::hex << static_cast<int>(byte) << " ";
     }
     std::cout << std::dec << std::endl;
+
+    //std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     return 0;
 }
